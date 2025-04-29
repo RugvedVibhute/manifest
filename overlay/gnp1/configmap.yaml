@@ -4,7 +4,7 @@ metadata:
   name: ren-application-config
   namespace: ren-application-gnp1
 data:
-  endpoints-config.yaml: |
+  endpoints-config.yaml: |-
     endpoints:
       npis:
         oAuth:
@@ -26,8 +26,7 @@ data:
         oAuth:
           url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/ipne-auth/api/v1/access"
         ipneUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/sd/das/api/v1/test/"
-
-  queries.yaml: |
+  queries.yaml: |-
     queries:
       wbsHeader:
         findByStateOrProvince: "SELECT w FROM WBSHeader w WHERE w.stateOrProvince = :stateOrProvince"
