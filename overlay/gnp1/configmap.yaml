@@ -1,74 +1,47 @@
 apiVersion: v1
-
 kind: ConfigMap
-
 metadata:
-
   name: ren-application-config
-
   namespace: ren-application-gnp1
-
 data:
+  endpoints-config.yaml: |
+    endpoints:
+      npis:
+        oAuth:
+          url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/sdpoauth/v1/accesstoken"
+        url638_1: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/serviceInventoryManagement/v4/service?serviceSpecification.id=sd_l3_service_cfs&characteristic={circuit_id="
+        url638_2: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/serviceInventoryManagement/v4/service?serviceSpecification.id=sd_nso_nbn_ee_backhaul_rfs&characteristic={service_id="
+        npisUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/nbn/v2/diagnostic/serviceTest"
+        loopbackTSRefId: "TST000000002016"
+        loopbackTSRefVersion: "1.0"
+        dpuPortStatusTSRefId: "TST000000001011"
+        dpuPortStatusTSRefVersion: "1.0"
+        dpuStatusTSRefId: "TST000000001011"
+        dpuStatusTSRefVersion: "1.0"
+        dpuResetTSRefId: "TST000000001015"
+        dpuResetTSRefVersion: "1.0"
+        performanceTestTSRefId: "TST000000001013"
+        performanceTestTSRefVersion: "1.0"
+      ipne:
+        oAuth:
+          url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/ipne-auth/api/v1/access"
+        ipneUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/sd/das/api/v1/test/"
 
-endpoints-config.yaml: |
-
-  endpoints:
-  npis:
-    oAuth:
-      url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/sdpoauth/v1/accesstoken"
-    url638_1: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/serviceInventoryManagement/v4/service?serviceSpecification.id=sd_l3_service_cfs&characteristic={circuit_id="
-    url638_2: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/serviceInventoryManagement/v4/service?serviceSpecification.id=sd_nso_nbn_ee_backhaul_rfs&characteristic={service_id="
-    npisUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/nbn/v2/diagnostic/serviceTest"
-    loopbackTSRefId: "TST000000002016"
-    loopbackTSRefVersion: "1.0"
-    dpuPortStatusTSRefId: "TST000000001011"
-    dpuPortStatusTSRefVersion: "1.0"
-    dpuStatusTSRefId: "TST000000001011"
-    dpuStatusTSRefVersion: "1.0"
-    dpuResetTSRefId: "TST000000001015"
-    dpuResetTSRefVersion: "1.0"
-    performanceTestTSRefId: "TST000000001013"
-    performanceTestTSRefVersion: "1.0"
-
-  ipne:
-    oAuth:
-      url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/ipne-auth/api/v1/access"
-    ipneUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/sd/das/api/v1/test/"
-
-  
-
-queries.yaml: |
-
-  queries:
-
-    wbsHeader:
-
-      findByStateOrProvince: "SELECT w FROM WBSHeader w WHERE w.stateOrProvince = :stateOrProvince"
-
-    networkElementType:
-
-      findByNetworkElement: "SELECT n FROM NetworkElementType n WHERE n.networkElement = :networkElement"
-
-    ntuNniSfpOrAaSfp:
-
-      findNtuNniSfp: "SELECT n.ntuNniSfp FROM NtuNniSfpOrAaSfp n WHERE n.ntuSize = :ntuSize AND :distanceRanges LIKE CONCAT('%', n.distanceRanges, '%') AND n.vendorType LIKE :vendorType"
-
-      findAaSfp: "SELECT n.aaSfp FROM NtuNniSfpOrAaSfp n WHERE n.ntuSize = :ntuSize AND :distanceRanges LIKE CONCAT('%', n.distanceRanges, '%') AND n.vendorType LIKE :vendorType"
-
-    ntuType:
-
-      findByNtuSize: "SELECT n FROM NtuType n WHERE n.ntuSize = :ntuSize"
-
-    skuId:
-
-      findByAaUniSfp: "SELECT s FROM SkuId s WHERE s.aaUniSfp = :aaUniSfp"
-
-    uniWithOrWithoutNtu:
-
-      findAaUniSfp: "SELECT u.aaUniSfp FROM UniWithOrWithoutNtu u WHERE :distanceRanges LIKE CONCAT('%', u.distanceRanges, '%') AND u.ntuRequired = :ntuRequired AND u.ntuSize = :ntuSize AND u.vendorType LIKE :vendorType AND u.uniPortCapacity = :uniPortCapacity AND u.uniInterfaceType = :uniInterfaceType"
-
-    shipToAddressQueries:
-
-      findAddressesByState: "SELECT ship_to_address_id, ship_to_address_role FROM public.ship_to_address WHERE state_or_province = :stateOrProvince"
-
-      findOtherAddresses: "SELECT sold_to_address_role, sold_to_address_id, network_site_address_role, network_site_address_id, additional_partner_address_role, additional_partner_address_id FROM public.other_address"
+  queries.yaml: |
+    queries:
+      wbsHeader:
+        findByStateOrProvince: "SELECT w FROM WBSHeader w WHERE w.stateOrProvince = :stateOrProvince"
+      networkElementType:
+        findByNetworkElement: "SELECT n FROM NetworkElementType n WHERE n.networkElement = :networkElement"
+      ntuNniSfpOrAaSfp:
+        findNtuNniSfp: "SELECT n.ntuNniSfp FROM NtuNniSfpOrAaSfp n WHERE n.ntuSize = :ntuSize AND :distanceRanges LIKE CONCAT('%', n.distanceRanges, '%') AND n.vendorType LIKE :vendorType"
+        findAaSfp: "SELECT n.aaSfp FROM NtuNniSfpOrAaSfp n WHERE n.ntuSize = :ntuSize AND :distanceRanges LIKE CONCAT('%', n.distanceRanges, '%') AND n.vendorType LIKE :vendorType"
+      ntuType:
+        findByNtuSize: "SELECT n FROM NtuType n WHERE n.ntuSize = :ntuSize"
+      skuId:
+        findByAaUniSfp: "SELECT s FROM SkuId s WHERE s.aaUniSfp = :aaUniSfp"
+      uniWithOrWithoutNtu:
+        findAaUniSfp: "SELECT u.aaUniSfp FROM UniWithOrWithoutNtu u WHERE :distanceRanges LIKE CONCAT('%', u.distanceRanges, '%') AND u.ntuRequired = :ntuRequired AND u.ntuSize = :ntuSize AND u.vendorType LIKE :vendorType AND u.uniPortCapacity = :uniPortCapacity AND u.uniInterfaceType = :uniInterfaceType"
+      shipToAddressQueries:
+        findAddressesByState: "SELECT ship_to_address_id, ship_to_address_role FROM public.ship_to_address WHERE state_or_province = :stateOrProvince"
+        findOtherAddresses: "SELECT sold_to_address_role, sold_to_address_id, network_site_address_role, network_site_address_id, additional_partner_address_role, additional_partner_address_id FROM public.other_address"
