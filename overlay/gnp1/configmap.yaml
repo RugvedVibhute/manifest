@@ -13,38 +13,27 @@ data:
 endpoints-config.yaml: |
 
   endpoints:
+  npis:
+    oAuth:
+      url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/sdpoauth/v1/accesstoken"
+    url638_1: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/serviceInventoryManagement/v4/service?serviceSpecification.id=sd_l3_service_cfs&characteristic={circuit_id="
+    url638_2: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/serviceInventoryManagement/v4/service?serviceSpecification.id=sd_nso_nbn_ee_backhaul_rfs&characteristic={service_id="
+    npisUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/nbn/v2/diagnostic/serviceTest"
+    loopbackTSRefId: "TST000000002016"
+    loopbackTSRefVersion: "1.0"
+    dpuPortStatusTSRefId: "TST000000001011"
+    dpuPortStatusTSRefVersion: "1.0"
+    dpuStatusTSRefId: "TST000000001011"
+    dpuStatusTSRefVersion: "1.0"
+    dpuResetTSRefId: "TST000000001015"
+    dpuResetTSRefVersion: "1.0"
+    performanceTestTSRefId: "TST000000001013"
+    performanceTestTSRefVersion: "1.0"
 
-    npis:
-
-      oAuth:
-
-        url: "http://testNpisOauth"
-
-        username: "test"
-
-        password: "test"
-
-      url638_1: "http://1st"
-
-      url638_2: "http://2nd"
-
-      npisUrl: "http://npis"
-
-    ipne:
-
-      oAuth:
-
-        url: "http://testipneOauth"
-
-        username: "test"
-
-        password: "test"
-
-      ipneUrl: "http://ipne"
-
-      ipneUserName: "abc"
-
-      ipnePassword: "test"
+  ipne:
+    oAuth:
+      url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/ipne-auth/api/v1/access"
+    ipneUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/sd/das/api/v1/test/"
 
   
 
