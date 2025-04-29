@@ -1,0 +1,53 @@
+- op: replace
+
+  path: /metadata/namespace
+
+  value: "ren-application-gnp1"
+
+ 
+
+- op: replace
+
+  path: /spec/template/spec/containers/0/image
+
+  value: "339712948801.dkr.ecr.ap-southeast-2.amazonaws.com/renaissance/renaissance-camunda:RC_64b10335-28042025063140" #updated
+
+ 
+
+- op: replace
+
+  path: /spec/template/spec/containers/0/env/0/value
+
+  value: "https://zeebegnp1.k8s.csi.gnpaws.au.singtelgroup.net:443"
+
+ 
+
+- op: replace
+
+  path: /spec/template/spec/containers/0/env/1/value
+
+  value: "https://zeebegnp1.k8s.csi.gnpaws.au.singtelgroup.net:443"
+
+ 
+
+- op: replace
+
+  path: /spec/template/spec/containers/0/env/3/value
+
+  value: "https://camundagnp1.k8s.csi.gnpaws.au.singtelgroup.net/auth/realms/camunda-platform/protocol/openid-connect/token"
+
+ 
+
+- op: replace
+
+  path: /spec/template/spec/containers/0/env/7/value
+
+  value: "dev" 
+
+ 
+
+- op: replace
+
+  path: /spec/template/spec/containers/0/env/9/value
+
+  value: "jdbc:postgresql://ca8-eks-dev-postgres.cluster-cmt5digvbybg.ap-southeast-2.rds.amazonaws.com:5432/ren" 

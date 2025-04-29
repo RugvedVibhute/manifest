@@ -1,0 +1,137 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: ren-application
+
+  namespace: ren-camunda # need change as per namespace
+
+spec:
+
+  replicas: 1
+
+  selector:
+
+    matchLabels:
+
+      app: ren-application #updated
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: ren-application #updated
+
+    spec:
+
+      containers:
+
+        - name: ren-application #updated
+
+          image: 339712948801.dkr.ecr.ap-southeast-2.amazonaws.com/renaissance/renaissance-camunda:RC_c301f7ae-23042025041341 #updated
+
+          ports:
+
+            - containerPort: 8080
+
+              name: http
+
+          env: # need changes as per cluster info
+
+            - name: ZEEBE_CLIENT_BROKER_GRPC_ADDRESS
+
+              value: "https://zeebegnp.k8s.csi.gnpaws.au.singtelgroup.net:443"
+
+            - name: ZEEBE_CLIENT_BROKER_GATEWAY_ADDRESS
+
+              value: "https://zeebegnp.k8s.csi.gnpaws.au.singtelgroup.net:443"
+
+            - name: ZEEBE_CLIENT_CLOUD_CLIENTID
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: zeebe-secret
+
+                  key: clientid
+
+            - name: ZEEBE_CLIENT_CLOUD_AUTHURL
+
+              value: https://camundagnp.k8s.csi.gnpaws.au.singtelgroup.net/auth/realms/camunda-platform/protocol/openid-connect/token
+
+            - name: ZEEBE_CLIENT_SECURITY_PLAINTEXT
+
+              value: "false"
+
+            - name: ZEEBE_TOKEN_AUDIENCE
+
+              value: zeebe-api
+
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+
+              value: org.postgresql.Driver
+
+            - name: SPRING_PROFILES_ACTIVE
+
+              value: dev  
+
+            - name: ZEEBE_CLIENT_CLOUD_CLIENTSECRET
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: zeebe-secret #updated
+
+                  key: clientsecret
+
+            - name: SPRING_DATASOURCE_URL
+
+              value: jdbc:postgresql://ca8-eks-dev-postgres.cluster-cmt5digvbybg.ap-southeast-2.rds.amazonaws.com:5432/ren
+
+            - name: SPRING_DATASOURCE_USERNAME
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: db-secret
+
+                  key: username
+
+            - name: SPRING_DATASOURCE_PASSWORD
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: db-secret
+
+                  key: password
+
+            - name: ZEEBE_CLIENT_WORKER_MAX_JOBS_ACTIVE
+
+              value: "2000"
+
+            - name: ZEEBE_CLIENT_WORKER_THREADS
+
+              value: "40"
+
+          resources:
+
+            limits:
+
+              memory: "768Mi"
+
+              cpu: "500m"
+
+            requests:
+
+              memory: "768Mi"
+
+              cpu: "500m" 

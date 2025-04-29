@@ -1,0 +1,75 @@
+apiVersion: networking.k8s.io/v1
+
+kind: Ingress
+
+metadata:
+
+  name: ren-ingress
+
+  namespace: ren-application
+
+  annotations:
+
+    alb.ingress.kubernetes.io/load-balancer-name: ""
+
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-2:091704606480:certificate/c371657d-c3f7-48d5-9e7e-14283666a4ad
+
+    alb.ingress.kubernetes.io/scheme: internal
+
+    alb.ingress.kubernetes.io/target-type: ip
+
+    ingress.kubernetes.io/rewrite-target: /
+
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
+
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+
+    alb.ingress.kubernetes.io/success-codes: 200,301,404
+
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+
+    alb.ingress.kubernetes.io/subnets: subnet-06657bf9f28a02efd, subnet-0a21a73a0a9dbf8b8
+
+    alb.ingress.kubernetes.io/inbound-cidrs: 10.0.0.0/8, 203.13.131.3/32, 203.13.126.10/32
+
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+
+    alb.ingress.kubernetes.io/healthcheck-port: 8080 
+
+    alb.ingress.kubernetes.io/tags:
+
+        branch=main,o_a_avail=24x7,o_b_bu=Group IT,o_b_bus-own=Head of core IT,o_b_cc=CC 5137,o_b_pri-own=CS Integration DevOps,o_b_project=REN,o_s_app-class=cat4,o_s_data-class=conf_non_pii,o_s_sra=SRA-3636,o_t_app=Core Tooling,o_t_app-own=CS Integration DevOps,o_t_app-plat=Core,o_t_app-role=infra,o_t_dep-mthd=iac,o_t_env=gnp,o_t_lifecycle=active,o_t_tech-own=CS Integration DevOps,repo=terraform-aws-eks-camunda-gnp
+
+  labels:
+
+    app: ren-ingress
+
+spec:
+
+  ingressClassName: alb
+
+  rules:
+
+  - host: ren-<env>.k8s.csi.gnpaws.au.singtelgroup.net
+
+    http:
+
+      paths:
+
+      - path: /
+
+        pathType: Prefix
+
+        backend:
+
+          service:
+
+            name: ren-appservice
+
+            port:
+
+              number: 8080 

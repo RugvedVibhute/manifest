@@ -1,0 +1,29 @@
+- op: replace
+
+  path: /metadata/namespace
+
+  value: "ren-application-gnp1"
+
+ 
+
+- op: replace
+
+  path: /metadata/annotations/alb.ingress.kubernetes.io~1load-balancer-name
+
+  value: "ren-camunda-application-alb-dev"
+
+  
+
+- op: replace
+
+  path: /spec/rules/0/host
+
+  value: "ren-gnp1.k8s.csi.gnpaws.au.singtelgroup.net"
+
+ 
+
+- op: replace
+
+  path: /spec/rules/0/http/paths/0/backend/service/name
+
+  value: "ren-application"

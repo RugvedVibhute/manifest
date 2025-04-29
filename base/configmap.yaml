@@ -1,0 +1,85 @@
+apiVersion: v1
+
+kind: ConfigMap
+
+metadata:
+
+  name: ren-application-config
+
+  namespace: ren-camunda
+
+data:
+
+  endpoints-config.yaml: |
+
+    endpoints:
+
+      npis:
+
+        oAuth:
+
+          url: "http://testNpisOauth"
+
+          username: "test"
+
+          password: "test"
+
+        url638_1: "http://1st"
+
+        url638_2: "http://2nd"
+
+        npisUrl: "http://npis"
+
+      ipne:
+
+        oAuth:
+
+          url: "http://testipneOauth"
+
+          username: "test"
+
+          password: "test"
+
+        ipneUrl: "http://ipne"
+
+        ipneUserName: "abc"
+
+        ipnePassword: "test"
+
+  
+
+  queries.yaml: |
+
+    queries:
+
+      wbsHeader:
+
+        findByStateOrProvince: "SELECT w FROM WBSHeader w WHERE w.stateOrProvince = :stateOrProvince"
+
+      networkElementType:
+
+        findByNetworkElement: "SELECT n FROM NetworkElementType n WHERE n.networkElement = :networkElement"
+
+      ntuNniSfpOrAaSfp:
+
+        findNtuNniSfp: "SELECT n.ntuNniSfp FROM NtuNniSfpOrAaSfp n WHERE n.ntuSize = :ntuSize AND :distanceRanges LIKE CONCAT('%', n.distanceRanges, '%') AND n.vendorType LIKE :vendorType"
+
+        findAaSfp: "SELECT n.aaSfp FROM NtuNniSfpOrAaSfp n WHERE n.ntuSize = :ntuSize AND :distanceRanges LIKE CONCAT('%', n.distanceRanges, '%') AND n.vendorType LIKE :vendorType"
+
+      ntuType:
+
+        findByNtuSize: "SELECT n FROM NtuType n WHERE n.ntuSize = :ntuSize"
+
+      skuId:
+
+        findByAaUniSfp: "SELECT s FROM SkuId s WHERE s.aaUniSfp = :aaUniSfp"
+
+      uniWithOrWithoutNtu:
+
+        findAaUniSfp: "SELECT u.aaUniSfp FROM UniWithOrWithoutNtu u WHERE :distanceRanges LIKE CONCAT('%', u.distanceRanges, '%') AND u.ntuRequired = :ntuRequired AND u.ntuSize = :ntuSize AND u.vendorType LIKE :vendorType AND u.uniPortCapacity = :uniPortCapacity AND u.uniInterfaceType = :uniInterfaceType"
+
+      shipToAddressQueries:
+
+        findAddressesByState: "SELECT ship_to_address_id, ship_to_address_role FROM public.ship_to_address WHERE state_or_province = :stateOrProvince"
+
+        findOtherAddresses: "SELECT sold_to_address_role, sold_to_address_id, network_site_address_role, network_site_address_id, additional_partner_address_role, additional_partner_address_id FROM public.other_address" 

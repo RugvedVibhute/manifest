@@ -1,0 +1,111 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+kind: Kustomization
+
+ 
+
+resources:
+
+- ../../base/
+
+ 
+
+namespace: ren-application-gnp1
+
+ 
+
+patches:
+
+- path: deployment.yaml
+
+  target:
+
+    version: v1
+
+    kind: Deployment
+
+    name: ren-application
+
+- path: deployment-config-patch.yaml  # Fixed file extension
+
+  target:
+
+    version: v1
+
+    kind: Deployment
+
+    name: ren-application
+
+- path: service.yaml
+
+  target:
+
+    kind: Service
+
+    name: ren-application
+
+    version: v1
+
+- path: ingress.yaml
+
+  target:
+
+    kind: Ingress
+
+    name: ren-ingress
+
+    version: v1
+
+- path: configmap.yaml  # Added ConfigMap patch
+
+  target:
+
+    kind: ConfigMap
+
+    name: ren-application-config
+
+    version: v1
+
+- patch: |-
+
+    - op: replace
+
+      path: /spec/data/0/remoteRef/key
+
+      value: ren/zeebegnp
+
+    - op: replace
+
+      path: /spec/data/1/remoteRef/key
+
+      value: ren/zeebegnp
+
+  target:
+
+    kind: ExternalSecret
+
+    name: zeebe-secret
+
+- patch: |-
+
+    - op: replace
+
+      path: /spec/data/0/remoteRef/key
+
+      value: ren/rengnp 
+
+    - op: replace
+
+      path: /spec/data/1/remoteRef/key
+
+      value: ren/rengnp 
+
+  target:
+
+    kind: ExternalSecret
+
+    name: ren-secret
+
+ 
+
+# Removed the configMapGenerator that was causing the error
