@@ -1,0 +1,25 @@
+# Configure Spring to load ConfigMap files
+spring:
+  config:
+    import:
+      - file:/app/config/endpoints-config.yaml
+      - file:/app/config/queries.yaml
+    additional-location: file:/app/config/
+  profiles:
+    active: dev
+
+# Enable configuration debug logging
+logging:
+  level:
+    org.springframework.core.env: DEBUG
+    org.springframework.boot.context.config: DEBUG
+
+# Add actuator endpoints to validate config loading
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env
+  endpoint:
+    env:
+      show-values: ALWAYS

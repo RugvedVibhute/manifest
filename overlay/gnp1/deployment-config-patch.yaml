@@ -1,27 +1,30 @@
 - op: add
-
   path: /spec/template/spec/volumes
-
   value:
-
     - name: config-volume
-
       configMap:
-
         name: ren-application-config
 
- 
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts
+  value:
+    - name: config-volume
+      mountPath: /app/config
 
 - op: add
-
-  path: /spec/template/spec/containers/0/volumeMounts
-
+  path: /spec/template/spec/containers/0/env/-
   value:
+    name: SPRING_CONFIG_LOCATION
+    value: "file:/app/config/,classpath:/"
 
-    - name: config-volume
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: SPRING_CONFIG_NAME
+    value: "application,endpoints-config,queries"
 
-      mountPath: /config
-
-
- 
-
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CORE_ENV
+    value: "DEBUG"
