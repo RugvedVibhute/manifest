@@ -1,0 +1,469 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ren-application-config
+  namespace: ren-application-gnp1
+data:
+  endpoints-config-service.yaml: |
+
+    endpoints:
+
+      kafka:
+
+        bootstrap-server: "lkc-1w5ykj.dom8pmemvwy.ap-southeast-2.aws.confluent.cloud:9092"
+
+        topic: "singtel.optus.groupit.dml.tst4.tmf653.notifications.diagnostics.camunda"
+
+        additional-properties: {
+
+                                "security.protocol": "SASL_SSL",
+
+                                "sasl.mechanism": "OAUTHBEARER",
+
+                                "sasl.jaas.config": "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required clientId=\"camundaoauthusr\"  clientSecret=\"Optus123\" extension_logicalCluster=\"lkc-1w5ykj\" extension_identityPoolId=\"pool-lJ45\";",
+
+                                "sasl.oauthbearer.token.endpoint.url": "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-csapigee/sdpjwt/v1/token",
+
+                                "ssl.endpoint.identification.algorithm": "https",
+
+                                "sasl.login.callback.handler.class": "org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler",
+
+                                "value.serializer": "org.apache.kafka.common.serialization.StringSerializer",
+
+                                "key.serializer": "org.apache.kafka.common.serialization.StringSerializer"
+
+                                }
+
+        jolt-spec-ipne : |
+        [
+
+
+      {
+
+
+        "operation": "shift",
+
+
+        "spec": {
+
+
+           "characteristic": {
+
+
+            "*": {
+
+
+              "name": {
+
+
+                "trace_id": {
+
+
+                  "@(2,value)": "eventId"
+
+
+                },
+
+
+                "test_result": {
+
+
+                  "@(2,value)": {
+
+
+                    "Success": {
+
+
+                      "#1": "eventNote.code",
+
+
+                      "#Success": "eventNote.reason"
+
+
+                    },
+
+
+                    "Error": {
+
+
+                      "#2": "eventNote.code",
+
+
+                      "#Error": "eventNote.reason"
+
+
+                    }
+
+
+                  }
+
+
+                },
+
+
+                "ansible_job_id": {
+
+
+                  "@(2,value)": "event.characteristic[0].value"
+
+
+                },
+
+
+                "message": {
+
+
+                  "@(2,value)": "event.characteristic[1].value"
+
+
+                },
+
+
+                "error_code": {
+
+
+                  "#error_code": "event.characteristic[2].name",
+
+
+                  "@(2,value)": "event.characteristic[2].value",
+
+
+                  "#String": "event.characteristic[2].valueType"
+
+
+                },
+
+
+                "error_reason": {
+
+
+                  "#error_reason": "event.characteristic[3].name",
+
+
+                  "@(2,value)": "event.characteristic[3].value",
+
+
+                  "#String": "event.characteristic[3].valueType"
+
+
+                }
+
+
+              }
+
+
+            }
+
+
+          },
+
+
+          "#date": "eventTime",
+
+
+          "#ServiceTestStateChangeNotification": "eventType",
+
+
+          "#TestCompleted": "description",
+
+
+          "state": "event.state",
+
+
+          "@(1,name)": "event.name",
+
+
+          "#ansible_job_id": "event.characteristic[0].name",
+
+
+          "#message": "event.characteristic[1].name",
+
+
+          "#String": [
+
+
+            "event.characteristic[0].valueType",
+
+
+            "event.characteristic[1].valueType"
+
+
+          ],
+
+
+           "@(1,testMeasure)": "event.testMeasure",
+
+
+          "testMeasure":{
+
+
+            "*":{
+
+
+              "value":{
+
+
+                "*":{
+
+
+                  "value":{
+
+
+                    "@":"result"
+
+
+                  }
+
+
+                }
+
+
+              }
+
+
+            }
+
+
+          }
+
+
+        }
+
+
+      }
+
+
+     ]
+
+        jolt-spec-npis : |
+        [
+    {
+        "operation": "shift",
+        "spec": {
+            "eventId": "eventId",
+            "eventType": "eventType",
+            "eventTime": "eventTime",
+            "description": "notificationType",
+            "eventNote": "eventNote",
+            "event": {
+                "notificationType": "description",
+                "id": "event.id",
+                "status": "event.state",
+                "serviceTest": {
+                    "serviceTestResults": {
+                        "*": {
+                            "result": {
+                                "@": "event.characteristic[1].value",
+                                "#Test_result": "event.characteristic[1].name",
+                                "#string": "event.characteristic[1].valueType"
+                            },
+                            "type": "event.name",
+                            "testMeasure": {
+                                "*": {
+                                    "*": {
+                                        "$": "event.testMeasure1[].metricName",
+                                        "result": {
+                                            "@": "event.testMeasure[#3].value[0].value",
+                                            "$": "event.testMeasure[#3].value[0].name",
+                                            "#string": "event.testMeasure[#3].value[0].valueType"
+                                        },
+                                        "profile": {
+                                            "@": "event.testMeasure[#3].value[1].value",
+                                            "$": "event.testMeasure[#3].value[1].name",
+                                            "#string": "event.testMeasure[#3].value[1].valueType"
+                                        },
+                                        "*": {
+                                            "*": {
+                                                "id": "tmpNode.&3[&1].name",
+                                                "value": "tmpNode.&3[&1].value",
+                                                "*": "tmpNode.&3[&1].\\@type",
+                                                "unit": "tmpNode.&3[&1].valueType"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "errors": {
+                                "*": {
+                                    "code": {
+                                        "#string": "event.characteristic[2].valueType",
+                                        "#error_code": "event.characteristic[2].name",
+                                        "@": "event.characteristic[2].value"
+                                    },
+                                    "reason": {
+                                        "#string": "event.characteristic[3].valueType",
+                                        "#error_reason": "event.characteristic[3].name",
+                                        "@": "event.characteristic[3].value"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "serviceRef": {
+                        "id": "event.relatedService.id",
+                        "type": "event.relatedService.\\@type"
+                    },
+                    "executionDate": {
+                        "startDateTime": "event.startDateTime",
+                        "endDateTime": "event.endDateTime"
+                    }
+                },
+                "externalId": {
+                    "#externalId": "event.characteristic[0].name",
+                    "@(1,externalId)": "event.characteristic[0].value",
+                    "#string": "event.characteristic[0].valueType"
+                }
+            }
+        }
+    },
+    {
+        "operation": "shift",
+        "spec": {
+            "@": "",
+            "event": {
+                "testMeasure1": {
+                    "*": {
+                        "metricName": {
+                            "*": {
+                                "$": "event.testMeasure[&3].metricName",
+                                "@(5,tmpNode.&)": {
+                                    "*": {
+                                        "@0": "event.testMeasure[&5].value"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "operation": "remove",
+        "spec": {
+            "event": {
+                "testMeasure1": ""
+            },
+            "tmpNode": ""
+        }
+    },
+    {
+        "operation": "modify-overwrite-beta",
+        "spec": {
+            "*": "=recursivelySquashNulls"
+        }
+    }
+    ]
+  endpoints-config-shipment.yaml: |
+
+    endpoints: 
+
+      kafka:
+
+        bootstrap-server: "lkc-1w5ykj.dom8pmemvwy.ap-southeast-2.aws.confluent.cloud:9092"
+
+        topic: "singtel.optus.groupit.dml.tst4.response.shippingOrderDecompose.camunda"
+
+        additional-properties: {
+
+                                 "security.protocol": "SASL_SSL",
+
+                                 "sasl.mechanism": "OAUTHBEARER",
+
+                                 "sasl.jaas.config": "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required clientId=\"camundaoauthusr\"  clientSecret=\"Optus123\" extension_logicalCluster=\"lkc-1w5ykj\" extension_identityPoolId=\"pool-lJ45\";",
+
+                                 "sasl.oauthbearer.token.endpoint.url": "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-csapigee/sdpjwt/v1/token",
+
+                                 "ssl.endpoint.identification.algorithm": "https",
+
+                                 "sasl.login.callback.handler.class": "org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler",
+
+                                 "value.serializer": "org.apache.kafka.common.serialization.StringSerializer",
+
+                                 "key.serializer": "org.apache.kafka.common.serialization.StringSerializer"
+
+                                 }
+
+                                 
+  endpoints-config.yaml: |
+
+    endpoints:
+
+      awsSecretName: "ren/rengnp"
+
+      awsSecretRegion: "ap-southeast-2"  
+
+      npis:
+
+        oAuth:
+
+          url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/sdpoauth/v1/accesstoken"
+
+        url638_1: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/serviceInventoryManagement/v4/service?serviceSpecification.id=sd_l3_service_cfs&characteristic={circuit_id="
+
+        url638_2: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/serviceInventoryManagement/v4/service?serviceSpecification.id=sd_nso_nbn_ee_backhaul_rfs&characteristic={service_id="
+
+        npisUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst2/tel-egress-csapigee/telms/nbn/v2/diagnostic/serviceTest"
+
+        loopbackTSRefId: "TST000000002016"
+
+        loopbackTSRefVersion: "1.0"
+
+        dpuPortStatusTSRefId: "TST000000001011"
+
+        dpuPortStatusTSRefVersion: "1.0"
+
+        dpuStatusTSRefId: "TST000000001011"
+
+        dpuStatusTSRefVersion: "1.0"
+
+        dpuResetTSRefId: "TST000000001015"
+
+        dpuResetTSRefVersion: "1.0"
+
+        performanceTestTSRefId: "TST000000001013"
+
+        performanceTestTSRefVersion: "1.0"
+
+      ipne:
+
+        oAuth:
+
+          url: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/ipne-auth/api/v1/access"
+
+        ipneUrl: "https://tel-revproxy-nonprod.csi.gnpaws.au.singtelgroup.net/tst4/tel-egress-ipne-apigeex/sd/das/api/v1/test/"
+  queries.yaml: |
+
+    queries:
+
+      wbsHeader:
+
+        findByStateOrProvince: "SELECT w FROM WBSHeader w WHERE w.stateOrProvince = :stateOrProvince"
+
+      uniWithOrWithoutNtu:
+
+        findAaUniSfp: "SELECT u.aaUniSfp FROM UniWithOrWithoutNtu u WHERE :distanceRanges LIKE CONCAT('%', u.distanceRanges, '%') AND u.ntuRequired = :ntuRequired AND u.ntuSize = :ntuSize AND u.vendorType LIKE :vendorType AND u.uniPortCapacity = :uniPortCapacity AND :uniInterfaceType LIKE CONCAT('%', u.uniInterfaceType, '%')"
+
+      ntuType:
+
+        findByNtuSize: "SELECT n FROM NtuType n WHERE n.ntuSize = :ntuSize"
+
+      networkElementType:
+
+        findByNetworkElement: "SELECT n FROM NetworkElementType n WHERE n.networkElement = :networkElement"
+
+      ntuNniSfpOrAaSfp:
+
+        findNtuNniSfp: "SELECT n.ntuNniSfp FROM NtuNniSfpOrAaSfp n WHERE n.ntuSize = :ntuSize AND :distanceRanges LIKE CONCAT('%', n.distanceRanges, '%') AND n.vendorType LIKE :vendorType"
+
+        findAaSfp: "SELECT n.aaSfp FROM NtuNniSfpOrAaSfp n WHERE n.ntuSize = :ntuSize AND :distanceRanges LIKE CONCAT('%', n.distanceRanges, '%') AND n.vendorType LIKE :vendorType"
+
+      skuId:
+
+        findByAaUniSfp: "SELECT s FROM SkuId s WHERE s.aaUniSfp = :aaUniSfp"
+
+      shipToAddressQueries:
+
+        findAddressesByState: "SELECT ship_to_address_id, ship_to_address_role FROM ren.ship_to_address WHERE state_or_province = :stateOrProvince"
+
+        findOtherAddresses: "SELECT sold_to_address_role, sold_to_address_id, network_site_address_role, network_site_address_id, additional_partner_address_role, additional_partner_address_id FROM ren.other_address"
